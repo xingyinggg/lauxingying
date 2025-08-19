@@ -354,7 +354,7 @@ const Portfolio = () => {
               </a>
 
               <a
-                href="www.google.com"
+                href="https://drive.google.com/file/d/1Ekv-D_EPtGcayoe9XMZ7GBLBBbJOoJqn/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -438,13 +438,13 @@ const Portfolio = () => {
               </div>
               <div className="space-y-4 pt-8">
                 <img
-                  src={about4Img}
-                  alt="Participating"
+                  src={about3Img}
+                  alt="Representing Ellipsis"
                   className="h-46 w-full object-cover rounded-xl hover:scale-105 transition-transform duration-300 border border-[#B7C8B5] animate-scaleIn stagger-2"
                 />
                 <img
-                  src={about3Img}
-                  alt="Representing Ellipsis"
+                  src={about4Img}
+                  alt="Participating"
                   className="h-36 w-full object-cover rounded-xl hover:scale-105 transition-transform duration-300 border border-[#B7C8B5] animate-scaleIn stagger-3"
                 />
               </div>
@@ -470,7 +470,6 @@ const Portfolio = () => {
                 }`}
               >
                 <h3 className="text-xl font-semibold mb-6 text-[#C5EBC3] flex items-center">
-                  <span className="w-2 h-2 bg-[#C5EBC3] rounded-full mr-3 animate-pulse"></span>
                   {category}
                 </h3>
                 <div className="space-y-3">
@@ -694,7 +693,11 @@ const Portfolio = () => {
               <span>Get In Touch</span>
             </a>
 
-            <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://drive.google.com/file/d/1Ekv-D_EPtGcayoe9XMZ7GBLBBbJOoJqn/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <button className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] px-8 py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105">
                 <Download className="w-4 h-4 group-hover:animate-bounce" />
                 <span>View Resume</span>
