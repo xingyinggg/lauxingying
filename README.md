@@ -37,7 +37,7 @@ Live Site → [https://lauxingying.vercel.app](https://lauxingying.vercel.app)
 
 ### 3. Run locally
 
-`npm run`
+`npm start`
 
 ---
 
