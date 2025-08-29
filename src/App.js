@@ -3,7 +3,6 @@ import {
   Menu,
   X,
   Code,
-  Camera,
   Users,
   MapPin,
   Mail,
@@ -12,9 +11,6 @@ import {
   ExternalLink,
   ArrowRight,
   Download,
-  Star,
-  Award,
-  Briefcase,
 } from "lucide-react";
 import { TypeAnimation } from "react-type-animation";
 import allProjects from "./data/projects";
@@ -57,7 +53,7 @@ const Portfolio = () => {
       "Agile/Scrum",
       "Stakeholder Management",
     ],
-    "Design & Tools": ["Figma", "Wireframing", "Git/GitHub"],
+    "Design & Tools": ["Figma", "Jira", "Wireframing", "Git/GitHub"],
   };
 
   return (
@@ -296,8 +292,8 @@ const Portfolio = () => {
         id="home"
         className="pt-20 min-h-screen flex items-center relative overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center relative z-10 mt-10">
+          <div className="space-y-6">
             {/* Status Badge */}
             <div className="inline-flex items-center space-x-2 bg-[#403D39] text-[#C5EBC3] px-4 py-2 rounded-full animate-bounce">
               <div className="w-2 h-2 bg-[#C5EBC3] rounded-full animate-pulse"></div>
@@ -307,7 +303,7 @@ const Portfolio = () => {
             </div>
 
             {/* Main Heading */}
-            <div className="space-y-4">
+            <div className="space-y-2">
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight animate-slideInLeft">
                 Hi, I'm{" "}
                 <span className="text-[#C5EBC3] animate-pulse-custom">
@@ -343,25 +339,24 @@ const Portfolio = () => {
               </p>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 animate-slideInLeft stagger-3">
+            {/* Buttons */}
+            <div className="flex flex-row flex-wrap gap-3 animate-slideInLeft stagger-3">
               <a
                 href="#projects"
-                className="bg-[#C5EBC3] hover:bg-[#6F7E6D] text-[#252422] px-8 py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105 hover:shadow-lg"
+                className="bg-[#C5EBC3] hover:bg-[#6F7E6D] text-[#252422] px-5 sm:px-8 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105 hover:shadow-lg"
               >
                 <span>View My Work</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
 
               <a
-                href="https://drive.google.com/file/d/1Ekv-D_EPtGcayoe9XMZ7GBLBBbJOoJqn/view?usp=sharing"
+                href="https://drive.google.com/file/d/181aJVQ1i7WbHmFfN_Bhzj1YqoEIvruPB/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] px-5 sm:px-8 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105"
               >
-                <button className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] px-8 py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105">
-                  <Download className="w-4 h-4 group-hover:animate-bounce" />
-                  <span>View Resume</span>
-                </button>
+                <Download className="w-4 h-4 group-hover:animate-bounce" />
+                <span>View Resume</span>
               </a>
             </div>
 
@@ -373,7 +368,7 @@ const Portfolio = () => {
           </div>
 
           {/* Profile Image with Floating Elements */}
-          <div className="relative animate-slideInRight">
+          <div className="relative animate-slideInRight mb-8">
             <div className="w-80 h-80 lg:w-96 lg:h-96 mx-auto relative">
               <div className="w-full h-full bg-[#403D39] rounded-3xl border-2 border-[#B7C8B5] overflow-hidden transform hover:scale-105 transition-all duration-500 animate-pulse-custom">
                 <img
@@ -684,35 +679,37 @@ const Portfolio = () => {
             connect and explore how we can create impact together.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-6 mb-12">
+          {/* Contact */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-12 px-4">
             <a
               href="mailto:xingyinglau.2023@scis.smu.edu.sg"
-              className="bg-[#C5EBC3] hover:bg-[#6F7E6D] text-[#252422] px-8 py-4 rounded-full font-medium transition-all duration-300 inline-flex items-center justify-center space-x-2 transform hover:scale-105 animate-slideInUp stagger-2"
+              className="bg-[#C5EBC3] hover:bg-[#6F7E6D] text-[#252422] px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 inline-flex items-center justify-center space-x-2 transform hover:scale-105 animate-slideInUp stagger-2"
             >
-              <Mail className="w-5 h-5 animate-bounce" />
+              <Mail className="w-4 h-4 animate-bounce" />
               <span>Get In Touch</span>
             </a>
 
-            <a
-              href="https://drive.google.com/file/d/1Ekv-D_EPtGcayoe9XMZ7GBLBBbJOoJqn/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] px-8 py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105">
-                <Download className="w-4 h-4 group-hover:animate-bounce" />
+            <div className="flex flex-row gap-3 sm:gap-4 animate-slideInUp stagger-4">
+              <a
+                href="https://drive.google.com/file/d/181aJVQ1i7WbHmFfN_Bhzj1YqoEIvruPB/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] text-[#C5EBC3] px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 inline-flex items-center justify-center space-x-2 transform hover:scale-105"
+              >
+                <Download className="w-4 h-4 animate-bounce" />
                 <span>View Resume</span>
-              </button>
-            </a>
+              </a>
 
-            <a
-              href="https://www.linkedin.com/in/lauxingying"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-2 border-[#C5EBC3] hover:bg-[#C5EBC3] hover:text-[#252422] text-[#C5EBC3] px-8 py-4 rounded-full font-medium transition-all duration-300 inline-flex items-center justify-center space-x-2 transform hover:scale-105 animate-slideInUp stagger-4"
-            >
-              <Linkedin className="w-5 h-5 animate-bounce" />
-              <span>LinkedIn</span>
-            </a>
+              <a
+                href="https://www.linkedin.com/in/lauxingying"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] text-[#C5EBC3] px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 inline-flex items-center justify-center space-x-2 transform hover:scale-105"
+              >
+                <Linkedin className="w-4 h-4 animate-bounce" />
+                <span>LinkedIn</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
