@@ -34,26 +34,34 @@ const Portfolio = () => {
   const featuredProjects = allProjects.slice(0, 3);
 
   const skills = {
-    Languages: ["JavaScript", "Python", "Java", "PHP", "SQL", "CSS"],
+    Languages: [
+      "JavaScript",
+      "Python (Pandas, NumPy, scikit-learn)",
+      "Java",
+      "PHP",
+      "SQL",
+    ],
     Frameworks: [
       "React",
+      "Next.js",
       "React Native",
       "Vue.js",
-      "Spring Boot",
       "Flask",
+      "Spring Boot",
       "OutSystems",
       "Tailwind CSS",
       "Bootstrap",
     ],
-    Databases: ["MySQL", "MongoDB", "Firebase", "phpMyAdmin"],
+    Databases: ["MySQL", "MongoDB", "Firebase", "Supabase", "phpMyAdmin"],
     "Product & Project Management": [
       "Product Strategy",
       "Roadmapping",
-      "User Research",
       "Agile/Scrum",
       "Stakeholder Management",
+      "Jira",
     ],
-    "Design & Tools": ["Figma", "Jira", "Wireframing", "Git/GitHub"],
+    Cloud: ["AWS", "Azure"],
+    "Design & Tools": ["Figma", "Wireframing", "Git"],
   };
 
   return (

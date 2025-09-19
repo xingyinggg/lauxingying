@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExternalLink, Github, Filter, Award, Code, Palette, Globe } from "lucide-react";
+import { ExternalLink, Github, Filter, Code, Palette, Globe } from "lucide-react";
 import projects from "./data/projects";
 
 const Projects = () => {
@@ -14,24 +14,24 @@ const Projects = () => {
     ? projects 
     : projects.filter(project => project.category === activeFilter);
 
-  const getStatusColor = (status) => {
-    switch(status) {
-      case 'Live': return 'bg-[#C5EBC3]';
-      case 'Award Winner': return 'bg-[#C5EBC3]';
-      case 'Prototype': return 'bg-[#B7C8B5]';
-      case 'In Development': return 'bg-[#B7C8B5]';
-      default: return 'bg-[#403D39]';
-    }
-  };
+  // const getStatusColor = (status) => {
+  //   switch(status) {
+  //     case 'Live': return 'bg-[#C5EBC3]';
+  //     case 'Award Winner': return 'bg-[#C5EBC3]';
+  //     case 'Prototype': return 'bg-[#B7C8B5]';
+  //     case 'In Development': return 'bg-[#B7C8B5]';
+  //     default: return 'bg-[#403D39]';
+  //   }
+  // };
 
-  const getCategoryIcon = (type) => {
-    switch(type) {
-      case 'Full-Stack': return <Code className="w-4 h-4" />;
-      case 'UI/UX Design': return <Palette className="w-4 h-4" />;
-      case 'Mobile App': return <Globe className="w-4 h-4" />;
-      default: return <Code className="w-4 h-4" />;
-    }
-  };
+  // const getCategoryIcon = (type) => {
+  //   switch(type) {
+  //     case 'Full-Stack': return <Code className="w-4 h-4" />;
+  //     case 'UI/UX Design': return <Palette className="w-4 h-4" />;
+  //     case 'Mobile App': return <Globe className="w-4 h-4" />;
+  //     default: return <Code className="w-4 h-4" />;
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-[#252422] text-white">
