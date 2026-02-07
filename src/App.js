@@ -22,13 +22,6 @@ import about4Img from "./assets/about4.png";
 
 const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Featured projects - using your actual projects with achievements highlighted
   const featuredProjects = allProjects.slice(0, 3);
