@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExternalLink, Github, Filter, Code, Palette, Globe } from "lucide-react";
+import { ExternalLink, Github, Filter } from "lucide-react";
 import projects from "./data/projects";
 
 const Projects = () => {
@@ -8,7 +8,7 @@ const Projects = () => {
   // Using your actual projects data
 
 
-  const filters = ['All', 'Web App', 'Hackathon', 'Mobile App Design'];
+  const filters = ['All', 'Web App', 'Data Analytics', 'Hackathon', 'Mobile App Design'];
   
   const filteredProjects = activeFilter === 'All' 
     ? projects 
@@ -44,7 +44,7 @@ const Projects = () => {
             </h1>
             <div className="w-20 h-1 bg-white mx-auto rounded-full mb-6"></div>
             <p className="text-xl text-white max-w-3xl mx-auto">
-              A collection of my work spanning full-stack development, product design, and hackathon achievements. 
+              A collection of my work spanning full-stack development, data analytics, hackathon achievements and product design.
             </p>
           </div>
 
@@ -98,7 +98,7 @@ const Projects = () => {
                     {project.title}
                   </h3>
 
-                  <p className="text-white group-hover:text-[#C5EBC3] mb-4 line-clamp-2">
+                  <p className="text-white group-hover:text-[#C5EBC3] mb-4">
                     {project.description}
                   </p>
 

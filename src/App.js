@@ -358,7 +358,7 @@ const Portfolio = () => {
               </a>
 
               <a
-                href="https://drive.google.com/file/d/181aJVQ1i7WbHmFfN_Bhzj1YqoEIvruPB/view?usp=sharing"
+                href="https://drive.google.com/file/d/13pi_zOcRKnbBd5hjeRI7sq6k-KP00VLi/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="border-2 border-[#C5EBC3] hover:bg-[#6F7E6D] hover:text-[#252422] px-5 sm:px-8 py-3 sm:py-4 rounded-full font-medium transition-all duration-300 flex items-center justify-center space-x-2 group transform hover:scale-105"
@@ -418,11 +418,10 @@ const Portfolio = () => {
               </p>
 
               <p className="text-lg text-gray-300 leading-relaxed">
-                Right now, I'm developing mobile and web apps as a Full-Stack
-                Web Developer Intern, while also leading a 45-member student
-                council as Vice President of SMU Ellipsis. I believe great
-                products come from balancing what's technically possible with
-                what users truly need.
+                Right now, I'm working on projects that sit between engineering
+                and product, where I get to think about users, constraints and
+                trade-offs. I believe great products come from balancing what's
+                technically possible with what users truly need.
               </p>
             </div>
 
@@ -726,7 +725,7 @@ const Portfolio = () => {
       <footer className="py-8 border-t border-[#403D39] bg-[#252422]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-[#B7C8B5] animate-fadeIn">
           <p>
-            &copy; 2025 Xing Ying. Crafted with React, Tailwind, and lots of
+            &copy; 2026 Xing Ying. Crafted with React, Tailwind, and lots of
             coffee
           </p>
         </div>

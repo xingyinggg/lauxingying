@@ -5,8 +5,38 @@ import infoguardImg from "../assets/infoguard.png";
 import afterclassImg from "../assets/afterclass.png";
 import artifyImg from "../assets/artify.png";
 import cathayImg from "../assets/cathay.png";
+import heartSyncImg from "../assets/heartsync.png";
+import maritimeRiskCareImg from "../assets/maritimeriskcare.png";
+import taskAllinOneImg from "../assets/taskallinone.png";
 
 const projects = [
+  {
+    title: "TaskAllinOne",
+    category: "Web App",
+    description:
+      "A full-stack task and project management platform for HR, Manager and Staffs to manage their work and collaborate effectively.",
+    image: taskAllinOneImg,
+    tech: ["Next.js", "Express", "Supabase", "Jira"],
+    githubUrl: "https://github.com/xingyinggg/ColdStorage",
+  },
+  {
+    title: "MaritimeRiskCare",
+    category: "Data Analytics",
+    description:
+      "A data mining project to examine maritime risk in terms of weather, piracy incidents and vessel collisions.",
+    image: maritimeRiskCareImg,
+    tech: ["Python", "Pandas", "Matplotlib", "Seaborn", "Jupyter Notebook"],
+    githubUrl: "https://github.com/zuweii/datamining",
+  },
+  {
+    title: "HeartSync",
+    category: "Web App",
+    description:
+      "An AWS cloud-based health monitoring system that collects, analyses, and visualizes real-time heart rate data from wearable devices to provide insights and alerts for users.",
+    image: heartSyncImg,
+    tech: ["React", "Node.js", "AWS Lambda", "DynamoDB", "IoT"],
+    // demoVideo: "https://youtu.be/6YhSaUao1f4?si=dSnTL5-3waReyAkA",
+  },
   {
     title: "MakanSimi",
     category: "Web App",
