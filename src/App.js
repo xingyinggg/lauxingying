@@ -11,8 +11,6 @@ import {
   ExternalLink,
   ArrowRight,
   Download,
-  ArrowUpRight,
-  ChevronRight,
 } from "lucide-react";
 import { TypeAnimation } from "react-type-animation";
 import allProjects from "./data/projects";
