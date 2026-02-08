@@ -67,7 +67,7 @@ const Projects = () => {
           <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             All Projects
           </h1>
-          <p className="text-lg text-[#a8a29e] max-w-2xl leading-relaxed">
+          <p className="text-lg text-[#a8a29e] leading-relaxed">
             A collection of projects spanning full-stack development, data
             analytics, hackathons, and product design.
           </p>
@@ -124,7 +124,7 @@ const Projects = () => {
                     <h3 className="text-lg font-semibold text-[#e8e6e3]">
                       {project.title}
                     </h3>
-                    <p className="text-sm text-[#a8a29e] leading-relaxed line-clamp-3 flex-1">
+                    <p className="text-sm text-[#a8a29e] leading-relaxed flex-1">
                       {project.description}
                     </p>
 

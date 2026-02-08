@@ -420,7 +420,7 @@ const Portfolio = () => {
             <FadeIn delay={200}>
               <div className="group grid lg:grid-cols-[200px_1fr] gap-4 lg:gap-8 p-6 rounded-2xl border border-white/5 hover:border-[#C5EBC3]/20 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="text-sm text-[#a8a29e] font-medium pt-1">
-                  2024 — Present
+                  2024 — 2025
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-start gap-3">
@@ -458,7 +458,7 @@ const Portfolio = () => {
               </h2>
               <div className="flex-1 h-px bg-white/10"></div>
             </div>
-            <p className="text-[#a8a29e] max-w-2xl mb-12">
+            <p className="text-[#a8a29e] mb-12">
               A showcase of my work in product development, software
               engineering, and hackathon achievements.
             </p>
@@ -490,7 +490,7 @@ const Portfolio = () => {
                     <h3 className="text-lg font-semibold text-[#e8e6e3]">
                       {project.title}
                     </h3>
-                    <p className="text-sm text-[#a8a29e] leading-relaxed line-clamp-2 flex-1">
+                    <p className="text-sm text-[#a8a29e] leading-relaxed flex-1">
                       {project.description}
                     </p>
 

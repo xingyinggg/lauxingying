@@ -41,7 +41,7 @@ const projects = [
     title: "MakanSimi",
     category: "Web App",
     description:
-      "A full-stack platform that helps friend groups plan and coordinate makan outings with ease — no more messy group chats.",
+      "A full-stack platform that helps friend groups plan and coordinate makan outings with ease, no more messy group chats.",
     image: makanSimiImg,
     tech: ["Vue.js", "Bootstrap", "Firebase", "Node.js"],
     demoVideo: "https://youtu.be/6YhSaUao1f4?si=dSnTL5-3waReyAkA",
