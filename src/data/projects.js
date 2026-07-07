@@ -97,7 +97,7 @@ const projects = [
       "A redesign of SMU’s bidding system with features like strategy toggles and mascot-assisted UX to help students manage their e$ more effectively.",
     image: afterclassImg,
     tech: ["Figma", "UI/UX", "Product Design"],
-    liveUrl:
+    figmaUrl:
       "https://www.figma.com/proto/iUvrAvpnF1U8KagkvcCxGD/beforeclass-AfterClass-Design-Submission?node-id=3488-1582&p=f&t=IL3NEacPWlzX7nW6-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A593&starting-point-node-id=3488%3A1582&show-proto-sidebar=1",
     achievement: "6th Place",
   },
@@ -109,7 +109,7 @@ const projects = [
     image: artifyImg,
     tech: ["Figma", "UI/UX", "Product Design"],
     demoVideo: "https://youtube.com/shorts/NQrLds2fOOs?feature=share",
-    liveUrl:
+    figmaUrl:
       "https://www.figma.com/proto/ZzZ2zc9C6Lr2Yy3u7KmWcD/Artify?node-id=135-344&p=f&t=gyaueMlr1mLVk290-1&scaling=scale-down&content-scaling=fixed&page-id=3%3A2&starting-point-node-id=135%3A344&show-proto-sidebar=1",
   },
   {
@@ -120,7 +120,7 @@ const projects = [
     image: cathayImg,
     tech: ["Figma", "UI/UX", "Product Design"],
     demoVideo: "https://youtube.com/shorts/NQrLds2fOOs?feature=share",
-    liveUrl:
+    figmaUrl:
       "https://www.figma.com/proto/lWnMS45ZyJqTSjPf2r5ndo/Cathay?node-id=354-4650&p=f&t=VjfJ2ptRR5YfCP05-1&scaling=scale-down&content-scaling=fixed&page-id=1%3A6&starting-point-node-id=354%3A4650",
   },
 ];

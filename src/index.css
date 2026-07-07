@@ -28,14 +28,83 @@ code {
     monospace;
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1916;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3733;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4642;
+}
+
 /* Scroll-triggered fade-in */
 .fade-section {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(28px) scale(0.98);
+  filter: blur(4px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .fade-section.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Ambient floating blobs */
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(24px, -32px, 0) rotate(8deg); }
+}
+.animate-float {
+  animation: float 11s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 17s ease-in-out infinite;
+}
+.animate-float-delay {
+  animation: float 14s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-delay {
+    animation: none;
+  }
+  .fade-section {
+    transition: opacity 0.3s ease;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Scroll-snap sections — desktop/tablet only. Mobile keeps free scrolling
+   since stacked content there often runs taller than the viewport, and
+   mandatory/proximity snap fights that. */
+.snap-section {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
+/* At lg+, each section is sized to exactly fill one viewport (see
+   lg:h-screen in App.js), so a firmer "one slide at a time" snap is safe
+   here without risking trapping a user inside taller content. */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
 }

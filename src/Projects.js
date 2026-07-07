@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Github, ExternalLink, Linkedin, Mail } from "lucide-react";
+import Tilt from "./components/Tilt";
 import allProjects from "./data/projects";
 
 /* ── tiny hook: fade-in on scroll ── */
@@ -47,7 +48,18 @@ const Projects = () => {
       : allProjects.filter((p) => p.category === activeFilter);
 
   return (
-    <div className="min-h-screen bg-[#1a1916] text-[#e8e6e3] selection:bg-[#C5EBC3]/30 selection:text-white">
+    <div className="min-h-screen bg-[#1a1916] text-[#e8e6e3] selection:bg-[#C5EBC3]/30 selection:text-white overflow-x-hidden">
+      {/* ── Ambient 3D background ── */}
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none z-0"
+        aria-hidden="true"
+      >
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#C5EBC3]/10 rounded-full blur-3xl animate-float-slow" />
+        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-[#C5EBC3]/[0.07] rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#C5EBC3]/[0.06] rounded-full blur-3xl animate-float-delay" />
+      </div>
+
+      <div className="relative z-10">
       {/* ── Nav ── */}
       <nav className="fixed top-0 w-full z-50 bg-[#1a1916]/80 backdrop-blur-lg border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center h-16">
@@ -82,7 +94,7 @@ const Projects = () => {
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
                   activeFilter === cat
                     ? "bg-[#C5EBC3] text-[#1a1916]"
                     : "bg-white/5 text-[#a8a29e] hover:text-[#e8e6e3] hover:bg-white/10"
@@ -101,7 +113,11 @@ const Projects = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((project, index) => (
               <FadeIn key={project.title} delay={index * 60}>
-                <div className="group flex flex-col bg-[#252320] rounded-2xl overflow-hidden border border-white/5 hover:border-[#C5EBC3]/20 transition-all duration-300 h-full">
+                <Tilt
+                  max={8}
+                  scale={1.02}
+                  className="group flex flex-col bg-[#252320] rounded-2xl overflow-hidden border border-white/5 hover:border-[#C5EBC3]/20 transition-colors duration-300 h-full"
+                >
                   {/* Image */}
                   <div className="relative overflow-hidden">
                     <img
@@ -110,7 +126,10 @@ const Projects = () => {
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {project.achievement && (
-                      <div className="absolute top-3 right-3 bg-[#C5EBC3] text-[#1a1916] px-3 py-1 rounded-full text-xs font-semibold">
+                      <div
+                        className="absolute top-3 right-3 bg-[#C5EBC3] text-[#1a1916] px-3 py-1 rounded-full text-xs font-semibold shadow-lg"
+                        style={{ transform: "translateZ(40px)" }}
+                      >
                         {project.achievement}
                       </div>
                     )}
@@ -186,7 +205,7 @@ const Projects = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </Tilt>
               </FadeIn>
             ))}
           </div>
@@ -226,6 +245,7 @@ const Projects = () => {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
