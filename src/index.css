@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ink: #111311;
+  --ground: #e9efea;
+  --paper: #f3f6f3;
+  --mint: #c5ebc3;
+  --muted: #4a524c;
+  --rule: rgba(17, 19, 17, 0.16);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(16px, 2.8vw, 40px);
+}
+
+/* Ultra-wide: cap the content column at 1840px by widening the gutters,
+   so text and the name keep their proportions while the fog stays full-bleed */
+@media (min-width: 1921px) {
+  :root {
+    --gutter: calc((100vw - 1840px) / 2);
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -9,102 +28,181 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--ground);
+}
+
+/* Lenis owns smooth scrolling; native smooth-scroll would fight it. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  background-color: #1a1916;
-  color: #e8e6e3;
+  font-family: "Archivo", system-ui, sans-serif;
+  background-color: var(--ground);
+  color: var(--ink);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+::selection {
+  background: var(--mint);
+  color: var(--ink);
 }
 
-/* Custom scrollbar */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+#site-menu :focus-visible {
+  outline-color: var(--mint);
+}
+
+/* Anchor jumps land below the fixed header. Lenis reads this too, so it
+   covers smooth scrolling, reduced motion, and /projects → /#section */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* Computer screens: each section is exactly one screen, content centred
+   below the fixed header. Type inside uses min(vw, vh) so short laptop
+   screens shrink it instead of overflowing. */
+@media (min-width: 1024px) {
+  .screen {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* !important: beats the sections' mobile padding utilities */
+    padding-top: 96px !important;
+    padding-bottom: 40px !important;
+  }
+  /* sections already reserve the header's space themselves */
+  section[id].screen {
+    scroll-margin-top: 0;
+  }
+}
+
+/* Scrollbar in the page's own palette */
+html {
+  scrollbar-color: #b4c0b6 var(--ground);
+  scrollbar-width: thin;
+}
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #1a1916;
+  background: var(--ground);
 }
 ::-webkit-scrollbar-thumb {
-  background: #3a3733;
+  background: #b4c0b6;
   border-radius: 999px;
+  border: 2px solid var(--ground);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a4642;
+  background: #8f9d92;
 }
 
-/* Scroll-triggered fade-in */
-.fade-section {
+/* ── Type roles ── */
+.font-display {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-variation-settings: "wdth" 100;
+}
+.display-wide {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+}
+.label {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tabular {
+  font-family: "Martian Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Reveal: content visible by default, lifted in only once JS confirms ── */
+.js-reveal [data-reveal] {
   opacity: 0;
-  transform: translateY(28px) scale(0.98);
-  filter: blur(4px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease-expo),
+    transform 1.1s var(--ease-expo);
+  transition-delay: var(--d, 0ms);
 }
-.fade-section.visible {
+.js-reveal [data-reveal].is-in {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
+  transform: none;
 }
 
-/* Ambient floating blobs */
-@keyframes float {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50% { transform: translate3d(24px, -32px, 0) rotate(8deg); }
+/* Line mask reveal for display headings */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
 }
-.animate-float {
-  animation: float 11s ease-in-out infinite;
+.mask-line > span {
+  display: block;
+  transition: transform 1.2s var(--ease-expo);
+  transition-delay: var(--d, 0ms);
 }
-.animate-float-slow {
-  animation: float 17s ease-in-out infinite;
+.js-reveal .mask-lines:not(.is-in) .mask-line > span {
+  transform: translateY(105%);
 }
-.animate-float-delay {
-  animation: float 14s ease-in-out infinite;
-  animation-delay: -5s;
+
+/* Hold the hero's entrance until the preloader lifts */
+html.is-loading #home [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+html.is-loading #home .mask-line > span {
+  transform: translateY(105%);
+}
+
+/* Link underline that draws in */
+.draw-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-expo);
+  text-decoration: none;
+}
+.draw-link:hover,
+.draw-link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Custom cursor only where a fine pointer exists */
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor a,
+  html.has-cursor button {
+    cursor: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-float,
-  .animate-float-slow,
-  .animate-float-delay {
-    animation: none;
-  }
-  .fade-section {
+  .js-reveal [data-reveal],
+  .mask-line > span {
     transition: opacity 0.3s ease;
-    transform: none;
-    filter: none;
-  }
-}
-
-/* Scroll-snap sections — desktop/tablet only. Mobile keeps free scrolling
-   since stacked content there often runs taller than the viewport, and
-   mandatory/proximity snap fights that. */
-.snap-section {
-  scroll-snap-align: start;
-}
-
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-snap-type: y proximity;
-  }
-}
-
-/* At lg+, each section is sized to exactly fill one viewport (see
-   lg:h-screen in App.js), so a firmer "one slide at a time" snap is safe
-   here without risking trapping a user inside taller content. */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-snap-type: y mandatory;
+    transform: none !important;
   }
 }

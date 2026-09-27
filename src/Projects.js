@@ -1,251 +1,110 @@
-import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Github, ExternalLink, Linkedin, Mail } from "lucide-react";
-import Tilt from "./components/Tilt";
+import { useState } from "react";
+import Fog from "./components/Fog";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { ProjectLinks, primaryLink } from "./components/ProjectIndex";
+import { Cursor, MaskLines, useReveals, useSmoothScroll } from "./components/motion";
 import allProjects from "./data/projects";
-
-/* ── tiny hook: fade-in on scroll ── */
-function useFadeIn() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("visible");
-          io.unobserve(el);
-        }
-      },
-      { threshold: 0.1 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return ref;
-}
-
-function FadeIn({ children, className = "", delay = 0 }) {
-  const ref = useFadeIn();
-  return (
-    <div
-      ref={ref}
-      className={`fade-section ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-}
 
 const categories = ["All", ...new Set(allProjects.map((p) => p.category))];
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  useSmoothScroll();
 
   const filtered =
-    activeFilter === "All"
-      ? allProjects
-      : allProjects.filter((p) => p.category === activeFilter);
+    activeFilter === "All" ? allProjects : allProjects.filter((p) => p.category === activeFilter);
+  useReveals([activeFilter]);
 
   return (
-    <div className="min-h-screen bg-[#1a1916] text-[#e8e6e3] selection:bg-[#C5EBC3]/30 selection:text-white overflow-x-hidden">
-      {/* ── Ambient 3D background ── */}
-      <div
-        className="fixed inset-0 overflow-hidden pointer-events-none z-0"
-        aria-hidden="true"
-      >
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#C5EBC3]/10 rounded-full blur-3xl animate-float-slow" />
-        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-[#C5EBC3]/[0.07] rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#C5EBC3]/[0.06] rounded-full blur-3xl animate-float-delay" />
-      </div>
+    <div className="relative min-h-screen text-ink overflow-x-clip">
+      <Cursor />
+      <Fog watch={["projects-top"]} />
+      <Header onHome={false} />
 
-      <div className="relative z-10">
-      {/* ── Nav ── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#1a1916]/80 backdrop-blur-lg border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center h-16">
-          <a
-            href="/"
-            className="flex items-center gap-2 text-[#a8a29e] hover:text-[#e8e6e3] transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back Home</span>
-          </a>
-        </div>
-      </nav>
-
-      {/* ── Header ── */}
-      <section className="pt-32 pb-12">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-            All Projects
-          </h1>
-          <p className="text-lg text-[#a8a29e] leading-relaxed">
-            A collection of projects spanning full-stack development, data
-            analytics, hackathons, and product design.
+      <main className="relative z-10">
+        <section id="projects-top" className="px-[var(--gutter)] pt-36 sm:pt-48 pb-16 sm:pb-24">
+          <MaskLines
+            as="h1"
+            lines={["All Projects"]}
+            className="font-display font-black tracking-[-0.04em] leading-[0.9] text-[clamp(40px,12.5vw,176px)] md:text-[clamp(56px,11vw,176px)]"
+          />
+          <p data-reveal className="mt-8 text-[17px] sm:text-[19px] leading-[1.55] text-ink/80 max-w-[520px]">
+            A collection of projects spanning full-stack development, data analytics, hackathons, and product design.
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Filters ── */}
-      <section className="pb-8">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
-                  activeFilter === cat
-                    ? "bg-[#C5EBC3] text-[#1a1916]"
-                    : "bg-white/5 text-[#a8a29e] hover:text-[#e8e6e3] hover:bg-white/10"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Grid ── */}
-      <section className="pb-24">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((project, index) => (
-              <FadeIn key={project.title} delay={index * 60}>
-                <Tilt
-                  max={8}
-                  scale={1.02}
-                  className="group flex flex-col bg-[#252320] rounded-2xl overflow-hidden border border-white/5 hover:border-[#C5EBC3]/20 transition-colors duration-300 h-full"
+        <div className="relative bg-ground rounded-[20px] sm:rounded-[28px] mx-[6px] sm:mx-2 px-[var(--gutter)] pt-8 sm:pt-12 pb-10">
+          <div role="group" aria-label="Filter projects by category" className="flex flex-wrap gap-2 pb-10 sm:pb-14">
+            {categories.map((cat) => {
+              const count = cat === "All" ? allProjects.length : allProjects.filter((p) => p.category === cat).length;
+              const on = activeFilter === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveFilter(cat)}
+                  aria-pressed={on}
+                  className={`label !text-[11.5px] rounded-full px-4 py-2.5 border transition-colors duration-300 ${
+                    on ? "bg-ink text-paper border-ink" : "border-ink/30 text-ink hover:border-ink"
+                  }`}
                 >
-                  {/* Image */}
-                  <div className="relative overflow-hidden">
+                  {cat} <span className="tabular opacity-60 ml-1">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Staggered two-column gallery: the right column rides lower, so
+              the page reads as a hung wall rather than a grid of cards. */}
+          <ul className="grid md:grid-cols-2 gap-x-[clamp(24px,5vw,96px)] gap-y-16 sm:gap-y-24 pb-16">
+            {filtered.map((project, i) => {
+              const href = primaryLink(project);
+              return (
+                <li
+                  key={project.title}
+                  data-reveal
+                  style={{ "--d": `${(i % 2) * 100}ms` }}
+                  className={`group relative flex flex-col ${i % 2 ? "md:mt-32" : ""}`}
+                >
+                  <div className="relative overflow-hidden rounded-[3px] aspect-[16/10] bg-[#d7e0d8] p-[clamp(6px,0.8vw,12px)] transition-colors duration-500 group-hover:bg-mint">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      className="w-full h-full object-contain object-center transition-transform duration-[1200ms] ease-expo group-hover:scale-[1.03]"
                     />
-                    {project.achievement && (
-                      <div
-                        className="absolute top-3 right-3 bg-[#C5EBC3] text-[#1a1916] px-3 py-1 rounded-full text-xs font-semibold shadow-lg"
-                        style={{ transform: "translateZ(40px)" }}
-                      >
-                        {project.achievement}
-                      </div>
-                    )}
                   </div>
-
-                  {/* Content */}
-                  <div className="flex flex-col flex-1 p-6 gap-3">
-                    <div className="text-xs font-medium uppercase tracking-wider text-[#C5EBC3]">
-                      {project.category}
-                    </div>
-                    <h3 className="text-lg font-semibold text-[#e8e6e3]">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm text-[#a8a29e] leading-relaxed flex-1">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {project.tech.map((tech, techIndex) => (
-                        <span
-                          key={techIndex}
-                          className="text-xs text-[#a8a29e] bg-white/5 px-2.5 py-1 rounded-md"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-4 pt-2 mt-auto">
-                      {project.liveUrl && (
+                  <div className="flex items-baseline justify-between gap-4 mt-6">
+                    <h2 className="flex-1 font-display font-semibold tracking-[-0.025em] leading-[1.1] text-[clamp(22px,2.4vw,34px)]">
+                      {href ? (
                         <a
-                          href={project.liveUrl}
-                          className="flex items-center gap-1.5 text-sm text-[#a8a29e] hover:text-[#C5EBC3] transition-colors"
+                          href={href}
                           target="_blank"
                           rel="noopener noreferrer"
+                          data-cursor="View"
+                          className="after:absolute after:inset-0 after:content-['']"
                         >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Live Demo
+                          {project.title}
                         </a>
+                      ) : (
+                        project.title
                       )}
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          className="flex items-center gap-1.5 text-sm text-[#a8a29e] hover:text-[#C5EBC3] transition-colors"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Github className="w-3.5 h-3.5" />
-                          Code
-                        </a>
-                      )}
-                      {project.figmaUrl && (
-                        <a
-                          href={project.figmaUrl}
-                          className="flex items-center gap-1.5 text-sm text-[#a8a29e] hover:text-[#C5EBC3] transition-colors"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Figma
-                        </a>
-                      )}
-                      {project.demoVideo && (
-                        <a
-                          href={project.demoVideo}
-                          className="flex items-center gap-1.5 text-sm text-[#a8a29e] hover:text-[#C5EBC3] transition-colors"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Video
-                        </a>
-                      )}
-                    </div>
+                    </h2>
+                    <p className="label text-ink/75 shrink-0">{project.category}</p>
                   </div>
-                </Tilt>
-              </FadeIn>
-            ))}
-          </div>
+                  <div>
+                    {project.achievement && <p className="label text-mint-deep mt-3">{project.achievement}</p>}
+                    <p className="mt-3 text-[15px] leading-[1.6] text-ink/80 max-w-[56ch]">{project.description}</p>
+                    <p className="mt-3 text-[13px] text-ink/70">{project.tech.join(" · ")}</p>
+                    <ProjectLinks project={project} className="mt-4" />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <Footer />
         </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="py-8 border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-[#a8a29e]">
-          <p>&copy; 2026 Xing Ying</p>
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/xingyinggg"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C5EBC3] transition-colors"
-              aria-label="GitHub"
-            >
-              <Github className="w-4 h-4" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/lauxingying"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C5EBC3] transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a
-              href="mailto:xingyinglau.2023@scis.smu.edu.sg"
-              className="hover:text-[#C5EBC3] transition-colors"
-              aria-label="Email"
-            >
-              <Mail className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </footer>
-      </div>
+      </main>
     </div>
   );
 };
