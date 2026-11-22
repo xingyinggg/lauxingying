@@ -1,47 +1,39 @@
-# Lau Xing Ying — Portfolio Website
+# Lau Xing Ying — Portfolio
 
-Welcome to my personal portfolio website!  
-This site showcases my projects, skills, and experience, built with **React** and **Tailwind CSS**.
+Personal portfolio of Lau Xing Ying, Information Systems student at SMU.
 
-Live Site → [https://lauxingying.vercel.app](https://lauxingying.vercel.app)
+Live site → [lauxingying.vercel.app](https://lauxingying.vercel.app)
 
----
+The whole site is one open styrofoam cai fan box on a hawker table. Each dish
+is a section, and the labels in the 3D scene are the navigation.
 
-## ✨ Features
+## Tech stack
 
-- Clean, responsive UI built with **Tailwind CSS**
-- Animated project cards with hover effects
-- Filterable project section (Web Apps, Hackathons, Mobile Designs)
-- Resume viewer and downloadable link
-- Favicon, custom theming, and OneDrive resume link
-
----
-
-## 🛠 Tech Stack
-
-- [React](https://reactjs.org/)
+- [React](https://react.dev/) (Create React App)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [Vite](https://vitejs.dev/) 
-- [Vercel](https://vercel.com/) 
-- [GitHub](https://github.com/) 
+- [three.js](https://threejs.org/) + [React Three Fiber](https://r3f.docs.pmnd.rs/) for the box scene
+- Deployed on [Vercel](https://vercel.com/)
 
----
+## Project layout
 
-## 🚀 Getting Started
+| Path | What's there |
+| --- | --- |
+| `src/App.js` | Page sections, panels and interactions |
+| `src/components/BoxScene.js` | The 3D box, dishes and Singapore objects |
+| `src/data/site.js` | Copy, experience, skills and links |
+| `src/data/projects.js` | Project data |
+| `src/orbit.js`, `src/sound.js` | Camera orbit navigation, sound effects |
+| `public/audio/` | Sound clips |
+| `DESIGN.md`, `PRODUCT.md` | Design system and product brief |
 
-### 1. Clone the repo
+## Getting started
 
-### 2. Install dependencies
+```sh
+npm install
+npm start      # http://localhost:3000
+npm run build  # production build in build/
+```
 
-`npm install`
+## Contact
 
-### 3. Run locally
-
-`npm start`
-
----
-
-## 📬 Contact
-
-Feel free to reach out to me at
-📧 xingyinglau.2023@scis.edu.sg
+lauxingying@gmail.com · [LinkedIn](https://www.linkedin.com/in/lauxingying)

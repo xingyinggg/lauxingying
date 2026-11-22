@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "design/previews/c-price-label-menu.html"
+        ],
+        "createdAt": "2026-11-14T16:59:22.352Z",
+        "reason": "user brief: asked for a styrofoam white colour token; this rough preview shows it as the ground"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "design/previews/nav-directions.html"
+        ],
+        "createdAt": "2026-11-22T05:37:53.801Z",
+        "reason": "Claude triage: throwaway comparison page for choosing a nav-hint direction, not site UI; the site's own ground is the sky blue and styrofoam white set in DESIGN.md"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "design/previews/nav-directions.html"
+        ],
+        "createdAt": "2026-11-22T05:37:53.982Z",
+        "reason": "Claude triage: mock-ups drawn as overlays on screenshot frames inside a comparison page; the nesting is the preview format, not a proposed UI"
+      }
+    ]
+  }
+}

@@ -20,7 +20,7 @@ Sits between product and engineering: ships full-stack apps and also shapes prod
 
 ## Operating Context
 
-React (CRA) + Tailwind single-page site with a `/projects` route for the full project list. Primary actions: email (xingyinglau.2023@scis.smu.edu.sg), resume (Google Drive link), LinkedIn, GitHub.
+React (CRA) + Tailwind single-page site with a React Three Fiber scene on the first screen. All projects live on the home page; `/projects` redirects there. Primary actions: email (lauxingying@gmail.com), resume (Google Drive link), LinkedIn, GitHub.
 
 ## Capabilities and Constraints
 
@@ -30,8 +30,20 @@ React (CRA) + Tailwind single-page site with a `/projects` route for the full pr
 
 ## Brand Commitments
 
-- Mint green `#C5EBC3` is the signature colour.
-- Visual reference explicitly chosen by the user: unseen.co (large display type, atmospheric soft 3D gradient world, small uppercase labels, preloader, custom cursor, smooth scroll, hover-reveal project list).
+- Concept (set by the user): the whole site is one open styrofoam cai fan box on a hawker table. No header and no title at the side; labels on the scene are the navigation, and clicking one flies to that part. Chosen from three previewed directions on 2026-11-15; the full system is in `DESIGN.md`.
+- Dishes she asked to feature: curry chicken, sweet and sour pork, fried chicken, french bean, cabbage, eggplant, tomato egg, steamed egg, egg tofu. Sauces are curry and sambal only.
+- Singapore objects: a small flimsy red plastic bag that moves in the wind, an SGQR-style QR stand, a CDC-voucher-style resume slip. Official logos are not copied.
+- Sound: object sound effects plus a stall voice ("xiao mei", "zhe ge", "na ge"). Sound starts off. Voice recordings are not yet supplied.
+- Tone: playful and local, but credible for PM/SWE recruiters. It must not feel like a gimmick.
+- Cuteness level follows `colourscheme-cutevibe.png` (bright, flat, friendly colour).
+- No mascot or character: the food is the personality.
+- The scene is real interactive 3D with animation, not an illustration.
+- The resume link points to Google Drive; the PDF in `src/` is not published because it carries her phone number.
+- Visual references chosen by the user live in `design/refs/`:
+  - `3d-label-overallbigpicture.png`: one 3D scene as the whole site, with labels on its parts.
+  - `animated-moving.png`: a 3D object that animates as the page moves.
+  - `overallcutevibe.png`: overall cute vibe of chunky 3D objects.
+  - `colourscheme-cutevibe.png`: colour scheme and cute vibe.
 
 ## Evidence on Hand
 

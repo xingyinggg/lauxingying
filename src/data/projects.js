@@ -11,6 +11,24 @@ import taskAllinOneImg from "../assets/taskallinone.png";
 
 const projects = [
   {
+    // Drafted from the resume (Final Year Project). No screenshot or link yet.
+    title: "AI Contract Review Platform",
+    category: "Final Year Project",
+    sponsor: "AITHENA",
+    description:
+      "An AI-powered contract review platform with document ingestion, OCR, classification and structured clause extraction, combining rule-based validation with LLM analysis and masking PII before external LLM calls.",
+    tech: [
+      "React",
+      "TypeScript",
+      "Express",
+      "Python",
+      "PostgreSQL",
+      "Docker",
+      "AWS",
+      "OpenRouter",
+    ],
+  },
+  {
     title: "TaskAllinOne",
     category: "Web App",
     description:

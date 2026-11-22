@@ -25,3 +25,17 @@ yarn-error.log*
 # playwright
 /test-results/
 /playwright-report/
+
+# AI agent tooling (installed locally; see skills-lock.json)
+/.agents/
+/.aider-desk/
+/.claude/skills/
+/.claude/settings.local.json
+
+# design scratch: screenshots, live session state, references
+/.impeccable/review/
+/.impeccable/live/
+/.impeccable/questions/
+/.impeccable/critique/
+/.playwright-mcp/
+/design/
