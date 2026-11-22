@@ -19,6 +19,7 @@
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --gutter: clamp(16px, 3vw, 44px);
   --wall: 12px;
+  --spring: cubic-bezier(0.34, 1.4, 0.5, 1);
 }
 
 html {
@@ -662,6 +663,212 @@ button.price.price-primary:hover {
   font-weight: 900;
 }
 
+/* ── Experience: the jobs as a stack of name cards (see DESIGN.md) ── */
+.deck {
+  display: grid;
+  padding-bottom: 28px; /* room for the cards peeking out below */
+  touch-action: pan-y;
+  border-radius: 8px;
+  outline-offset: 6px;
+}
+.ncard {
+  grid-area: 1 / 1;
+  background: var(--rice);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--shade);
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.5s var(--spring);
+}
+/* while held, every card follows the drag directly */
+.deck.is-dragging .ncard {
+  transition: none;
+  cursor: grabbing;
+}
+/* no ring round the stack: focus shows in the hint line under it instead */
+.deck:focus-visible {
+  outline: none;
+}
+.card-scroll:has(.deck:focus-visible) .deck-hint {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ncard-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--sambal);
+  color: var(--styrofoam);
+}
+.ncard-band .tick {
+  font-size: 11px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ncard-body {
+  padding: 14px 16px 16px;
+}
+.deck-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.deck-index button {
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  background: var(--rice);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--shade);
+  transition: background-color 0.2s, color 0.2s;
+}
+.deck-index button:hover {
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+.deck-index button[aria-current="true"] {
+  background: var(--ink);
+  color: var(--styrofoam);
+  box-shadow: none;
+}
+
+/* ── Skills: the counter, the shortlist and the underlined skills ── */
+.counter {
+  background: var(--sambal);
+  border-radius: 18px;
+  padding: 18px 16px 16px;
+}
+.counter-title {
+  color: var(--styrofoam);
+  font-size: clamp(22px, 2.4vw, 28px);
+  margin-bottom: 12px;
+}
+.task-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* narrow phones: two columns, so the counter leaves room for the answer */
+@media (max-width: 479px) {
+  .counter {
+    padding: 14px 12px 12px;
+  }
+  .counter-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .task-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .task-row .task {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
+.task {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px 8px 10px;
+  border-radius: 3px;
+  background: var(--rice);
+  color: var(--ink);
+  font-family: "Sometype Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  transition: transform 0.35s var(--spring), background-color 0.2s, color 0.2s;
+}
+.task:hover {
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+.task[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--styrofoam);
+  box-shadow: 0 0 0 2px var(--styrofoam);
+  transform: translateY(-2px) rotate(-1.5deg);
+}
+.task[aria-pressed="true"]:nth-child(even) {
+  transform: translateY(-2px) rotate(1.5deg);
+}
+/* the kind-of-work mark: a square, or a circle for the second task of a colour */
+.mk {
+  flex: none;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--c);
+  transition: transform 0.35s var(--spring);
+}
+.mk.is-round {
+  border-radius: 50%;
+}
+.task[aria-pressed="true"] .mk {
+  transform: scale(1.25);
+}
+.tickets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ticket {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--rice);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.3s var(--spring);
+  animation: ticket-in 0.55s var(--spring) backwards;
+  animation-delay: var(--d, 0ms);
+}
+.ticket:hover {
+  transform: translateY(-3px);
+}
+@keyframes ticket-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.85) rotate(var(--r, 0deg));
+  }
+}
+.pips {
+  display: inline-flex;
+  gap: 3px;
+}
+.pips .mk {
+  width: 10px;
+  height: 10px;
+}
+.sk {
+  text-decoration: underline 4px transparent;
+  text-underline-offset: 5px;
+  text-decoration-skip-ink: none;
+  transition: color 0.25s, text-decoration-color 0.25s;
+}
+.sk.is-round {
+  text-decoration-style: dotted;
+}
+.is-filtered .sk {
+  color: var(--ink-soft);
+}
+.is-filtered .sk.is-on {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration-color: var(--c);
+}
+
 /* mouse words, or touch words: the sign says what this device can do */
 .for-touch {
   display: none;
@@ -814,6 +1021,7 @@ button.price.price-primary:hover {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden; /* a dealt name card flies off the side */
   padding-right: 14px;
   scrollbar-gutter: stable;
 }
@@ -822,6 +1030,7 @@ button.price.price-primary:hover {
   .arrive,
   .arrive-now,
   .role-in,
+  .ticket,
   .browse-hint:not(.is-gone) {
     animation: none;
   }

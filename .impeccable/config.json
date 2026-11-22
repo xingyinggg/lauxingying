@@ -29,6 +29,24 @@
         ],
         "createdAt": "2026-11-22T05:37:53.982Z",
         "reason": "Claude triage: mock-ups drawn as overlays on screenshot frames inside a comparison page; the nesting is the preview format, not a proposed UI"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "var(--spring)",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-11-22T11:39:48.148Z",
+        "reason": "Claude triage: the user chose React Bits pieces whose character is a spring (Stack, Jelly Radio, Bounce Cards); DESIGN.md specifies the name-card deal and ticket pop-in as springs. Mild overshoot (1.4), used only for those."
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.4, 0.5, 1)",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-11-22T11:39:48.148Z",
+        "reason": "Claude triage: the user chose React Bits pieces whose character is a spring (Stack, Jelly Radio, Bounce Cards); DESIGN.md specifies the name-card deal and ticket pop-in as springs. Mild overshoot (1.4), used only for those."
       }
     ]
   }

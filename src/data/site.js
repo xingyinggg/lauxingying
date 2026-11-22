@@ -59,6 +59,54 @@ export const skills = {
   ],
 };
 
+/* The Skills card asks what the job needs. Six tasks, in order from product to
+   code. `kind` picks the colour, as for projects (curry, grape, bag blue); the
+   second task of each colour is marked with a circle instead of a square.
+   `skills` are named exactly as above. `work` names the projects (by title) and
+   jobs (by organisation) that show the task, and must really show it. */
+const TASK_LIST = [
+  {
+    name: "Shape a product",
+    kind: "design",
+    skills: ["Product Strategy", "Roadmapping", "Requirements Gathering", "KPI & Product Metrics", "Figma"],
+    work: ["Shopee", "AfterClass Hackathon UI"],
+  },
+  {
+    name: "Run experiments",
+    kind: "design",
+    skills: ["A/B Testing", "KPI & Product Metrics", "SQL", "Data Visualisation"],
+    work: ["Shopee"],
+  },
+  {
+    name: "Make sense of data",
+    kind: "ai",
+    skills: ["SQL", "Pandas", "Exploratory Data Analysis", "Data Visualisation", "Tableau", "Machine Learning (scikit-learn)"],
+    work: ["MaritimeRiskCare"],
+  },
+  {
+    name: "Add AI to a product",
+    kind: "ai",
+    skills: ["LLM Integration", "OCR & Document Extraction", "Computer Vision (OpenCV)", "Python", "AI Coding Tools (Claude Code, Codex)"],
+    work: ["AI Contract Review Platform", "ClearPass"],
+  },
+  {
+    name: "Build an app",
+    kind: "eng",
+    skills: ["JavaScript", "TypeScript", "React", "Next.js", "React Native", "Node.js/Express", "PostgreSQL"],
+    work: ["MindFlex Education", "TaskAllinOne", "HeartSync", "Infoguard"],
+  },
+  {
+    name: "Ship it",
+    kind: "eng",
+    skills: ["Docker", "AWS", "Agile/Scrum", "Jira"],
+    work: ["MindFlex Education", "AI Contract Review Platform", "TaskAllinOne"],
+  },
+];
+export const tasks = TASK_LIST.map((t, i) => ({
+  ...t,
+  round: TASK_LIST.slice(0, i).some((x) => x.kind === t.kind),
+}));
+
 export const experience = [
   {
     period: "Sep 2026 — Dec 2026",

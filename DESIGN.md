@@ -254,7 +254,7 @@ The palette is taken from the stall: the white of the box, the two sauces, the v
 
 ### Named rules
 
-**The Kind Of Work Rule.** Colour answers the one question a recruiter brings: what kind of work is this? The three kinds match the three roles on her card. Every project carries a small square in its colour: **grape for AI & data**, **bag blue for software engineering**, **curry for product design**. The kind is also always written as a word beside it (in lists and project cards), so colour is never the only signal. Nothing else is colour-coded: sections carry no square, "featured" is shown by size and order (the box, the top of the list), and an award is spelled out in a sambal badge ("Finalist", "6th Place"), with the full award name in the project card.
+**The Kind Of Work Rule.** Colour answers the one question a recruiter brings: what kind of work is this? The three kinds match the three roles on her card. Every project carries a small square in its colour: **grape for AI & data**, **bag blue for software engineering**, **curry for product design**. The kind is also always written as a word beside it (in lists and project cards), so colour is never the only signal. The same three colours mark the six tasks in the Skills card (see Skills card), because each task is one of the three kinds of work. Nothing else is colour-coded: sections carry no square, "featured" is shown by size and order (the box, the top of the list), and an award is spelled out in a sambal badge ("Finalist", "6th Place"), with the full award name in the project card.
 
 | Kind of work         | Colour   | Projects                                                                |
 | -------------------- | -------- | ----------------------------------------------------------------------- |
@@ -284,7 +284,7 @@ The palette is taken from the stall: the white of the box, the two sauces, the v
 - **Small** (400, 14px): tech stacks joined with " · ", captions, hints.
 - **Tag** (600, 14px): button text.
 - **Label** (600, 12px, uppercase, 0.08em): categories and organisation names.
-- **Price** (Sometype Mono 500, 13px, tabular figures): every label in the scene, and experience dates.
+- **Price** (Sometype Mono 500, 13px, tabular figures): every label in the scene, the task price cards in the Skills card, and experience dates.
 
 ### Named rules
 
@@ -384,7 +384,7 @@ Sound is part of the scene, like the steam. It makes the objects feel real, and 
 | Pressing the sambal pot              | One wet dollop                       |
 | Flying in and out                    | A soft whoosh, barely there          |
 
-The bag, box and curry sounds are recordings supplied by Xing Ying (`design/sound`, served from `public/audio`). The rest are generated in the browser.
+The bag, box and curry sounds are recordings supplied by Xing Ying (`design/sound`, served from `public/audio`). The rest are generated in the browser. The recordings are decoded ahead of time, so the box opens with no lag. The bag plays a 2-second piece of its recording, and at most once every 30 seconds, whether a gust or a hover sets it off.
 
 ### The stall voice
 
@@ -397,7 +397,7 @@ The voice is a real recording of a person, kept to a second or less per phrase. 
 
 ### Rules
 
-- **Sound is on from the first click.** Browsers do not allow sound before the visitor clicks or taps, so nothing plays on arrival; the first click anywhere wakes it. A "Sound" tag in the scene mutes it, and the choice is remembered.
+- **Sound is on from the first click.** Browsers do not allow sound before the visitor clicks or taps, so nothing plays on arrival; the first click anywhere wakes it. A "Sound" tag in the scene mutes it, and the choice is remembered. Muting silences every sound at once, including any still playing.
 - Every sound is under one second, except the greeting. Nothing loops and there is no background music.
 - Hover sounds have a short cooldown, so sweeping the pointer across the scene does not fire them in a burst.
 - All sounds sit well below speech volume. The voice is slightly louder than the object sounds.
@@ -464,6 +464,33 @@ The one label style in the scene, after a stall's price card. Sections, projects
 
 - Filter chips at the top, one per discipline with its square and count ("AI & data 3 · Software engineering 5 · Product design 3"), plus "All". They double as the colour key.
 - Two groups, Featured then More projects; a filter hides the rows of other disciplines and any group left empty.
+
+### Experience card
+
+The four jobs as a stack of name cards, the same kind of card as the one inside the lid, so the panel and the scene read as one set.
+
+- **Each card:** rice white, 6px radius, a 1px shade edge, about the proportions of a real name card. A sambal-red band across the top holds the organisation in the display face (styrofoam white) and the dates in Sometype Mono on the right. Below it: the role in the heading face and the description in full, exactly as written.
+- **The stack:** the top card lies flat; the three under it peek out below, each a few pixels lower, slightly smaller and tilted a degree or two either way.
+- **Dealing:** the top card follows a drag or swipe either way, and the card under it rises into place as it goes. Let go past about 80px and the top card is thrown off that side to the back of the stack; let go sooner and it springs back. A click or tap, or →, throws it to the right; ← brings the last one back.
+- **Index row:** under the stack, one price-card button per job (44px tall) with its dates in Sometype Mono ("Sep 2026–Dec 2026"), newest first. Pressing one brings that card to the top; the job on top has its button filled ink. Every job is always one press away.
+- **Focus:** no ring round the stack, which would frame the cards in black; while it has keyboard focus, the hint line under it ("Drag the top card either way, click it, or use ← →") turns ink and semibold instead.
+- **Access:** the stack takes focus and answers ← →; only the top card is exposed to screen readers, and each index button names the role and organisation.
+- **Reduced motion:** cards swap with no fly-off or spring.
+
+### Skills card
+
+The recruiter says what the job needs, and the skills answer.
+
+- **The counter:** the card opens with a sambal-red block across its full width, with the 18px corners of a compartment cell, like the band on the name cards. On it: "What does the job need?" in the display face, styrofoam white, and the six tasks as price cards. It is the card's header; "Skills & Expertise" follows lower down, above the skills.
+- **The six tasks**, in this order, from product to code: Shape a product, Run experiments, Make sense of data, Add AI to a product, Build an app, Ship it. Each is a price card: rice white, 3px radius, Sometype Mono, with a mark for its kind of work: curry for the first two, grape for the next two, bag blue for the last two.
+- **On narrow phones** (under 480px) the six tasks sit in two columns at 12px, and the counter's title drops to 20px, so the counter takes well under half the sheet.
+- **Telling a pair apart:** the first task of each colour (the one nearer product) has a square mark; the second has a circle. The same shape follows the task everywhere: in the shortlist dots, and in the underline of the skills it brings (solid for a square, dotted for a circle). So the six tasks never rely on colour alone.
+- **Picking:** any number can be picked, and pressing again unpicks. A picked card turns ink with styrofoam text, lifts 2px and tilts about 1.5 degrees (alternating left and right), and its square grows slightly. A styrofoam ring marks it on the red.
+- **The shortlist:** under the counter, the work that shows the picked tasks, best match first: one small rice ticket per project or job, with its name and one mark (square or circle, in its colour) for each picked task it covers. Tickets pop in one after another, each at a slight tilt, and straighten and lift on hover. No pictures. Pressing a ticket goes to that work: a featured project's dish, another project's card in the Projects list, or a job, brought to the top of the Experience stack. With nothing picked, one line says "Pick what the job needs, and the work that shows it comes out here."
+- **The skills:** below the shortlist, under the title "Skills & Expertise", the four groups as plain text joined with commas, as now. With nothing picked, all are ink. Once something is picked, the skills for the picked tasks turn semibold ink with a thick underline in the colour of the task that brought them, solid or dotted to match its mark (the first pick, if several did), and the rest turn ink soft. Nothing is hidden.
+- **Content:** which skills and which work belong to each task is set in `src/data/site.js` and is Xing Ying's call. Every piece of work named must really show that task.
+- **Access:** the tasks are toggle buttons (pressed or not); the shortlist is announced politely as it changes; each ticket names how many picks it covers ("covers 2 of 3").
+- **Reduced motion:** no lift, tilt or pop-in; states change at once.
 
 ### Compartment card
 

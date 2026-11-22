@@ -1,10 +1,14 @@
 import { VOICE } from "./data/site";
 
-/* Every effect is generated in the browser with Web Audio, so there are no
-   sound files to load. Voice clips are the exception: see VOICE in site.js. */
+/* Effects are generated in the browser with Web Audio, apart from three
+   recordings (bag, box, curry) and any voice clips set in VOICE in site.js.
+   Everything plays through one output, so muting silences it all at once,
+   including sounds already playing. */
 
 let ctx = null;
-let master = null;
+let out = null; // the mute switch: everything ends here
+let master = null; // the generated effects, through a limiter
+let clipBus = null; // the recordings
 let enabled = true;
 let awake = false; // true once the visitor has clicked or tapped
 const last = {};
@@ -20,6 +24,11 @@ function audio() {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
     ctx = new AC();
+    out = ctx.createGain();
+    out.gain.value = enabled ? 1 : 0;
+    out.connect(ctx.destination);
+    clipBus = ctx.createGain();
+    clipBus.connect(out);
     master = ctx.createGain();
     master.gain.value = 0.6;
     // a limiter, so stacked sounds get loud without crackling
@@ -28,7 +37,7 @@ function audio() {
     limit.ratio.value = 8;
     limit.attack.value = 0.002;
     limit.release.value = 0.12;
-    master.connect(limit).connect(ctx.destination);
+    master.connect(limit).connect(out);
   }
   if (ctx.state === "suspended") ctx.resume();
   return ctx;
@@ -183,73 +192,89 @@ const fx = {
 };
 
 const CHIMES = { xiaomei: [660, 880, 990], zhege: [740, 620], nage: [620, 740] };
-const COOLDOWN = { pour: 1400, plop: 300, crinkle: 500, rustle: 2500, tap: 120, squeak: 400, snap: 400, whoosh: 300 };
+const COOLDOWN = { pour: 1400, plop: 300, bag: 30000, tap: 120, squeak: 400, snap: 400, whoosh: 300 };
+// sounds that share one cooldown: the bag rustles at most once every 30s,
+// whether a gust or a hover set it off
+const SHARED = { crinkle: "bag", rustle: "bag" };
 
 function allowed(name) {
+  const key = SHARED[name] || name;
   const now = performance.now();
-  if (now - (last[name] || 0) < (COOLDOWN[name] || 0)) return false;
-  last[name] = now;
+  if (now - (last[key] ?? -Infinity) < (COOLDOWN[key] || 0)) return false;
+  last[key] = now;
   return true;
 }
 
-/* Recorded clips, supplied by Xing Ying (copied from design/sound). They play
-   through plain audio elements, which is the most dependable route. */
+/* Recorded clips, supplied by Xing Ying (copied from design/sound). They are
+   fetched and decoded ahead of time, so they start the moment they are asked
+   for: the box clip plays on the very first click. `from` skips the quiet
+   lead-in of a recording and `max` cuts a long one short with a quick fade. */
 const FILES = {
   bag: "/audio/plastic-bag.mp3",
   box: "/audio/styrofoam-box.mp3",
   curry: "/audio/curry.mp3",
 };
 const RECORDED = {
-  crinkle: { file: "bag", volume: 1, max: 1.6 },
-  rustle: { file: "bag", volume: 0.3, max: 0.9 },
+  crinkle: { file: "bag", volume: 1, from: 0.5, max: 2 },
+  rustle: { file: "bag", volume: 0.3, from: 0.5, max: 2 },
   squeak: { file: "box", volume: 1 },
-  pour: { file: "curry", volume: 1 },
+  pour: { file: "curry", volume: 1, from: 0.15 },
 };
-const clips = {};
+const buffers = {};
+const playing = new Set(); // recordings still sounding, stopped on mute
 
-function clip(name) {
-  if (!clips[name]) {
-    const a = new Audio(process.env.PUBLIC_URL + FILES[name]);
-    a.preload = "auto";
-    clips[name] = a;
-  }
-  return clips[name];
+function load(name) {
+  if (buffers[name] || typeof window === "undefined") return;
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  if (!OAC || !window.fetch) return;
+  // an offline context decodes without waiting for a click; the buffer it
+  // makes plays in the live context later
+  buffers[name] = fetch(process.env.PUBLIC_URL + FILES[name])
+    .then((r) => r.arrayBuffer())
+    .then((bytes) => new Promise((ok, fail) => new OAC(1, 1, 44100).decodeAudioData(bytes, ok, fail)))
+    .then((buf) => (buffers[name] = buf))
+    .catch(() => (buffers[name] = null));
 }
 
-function playClip({ file, volume, max }) {
-  const a = clip(file);
-  clearTimeout(a.stopTimer);
-  clearInterval(a.fadeTimer);
-  a.pause();
-  try {
-    a.currentTime = 0;
-  } catch (e) {
-    /* not loaded yet: it will simply start from the beginning */
+if (typeof window !== "undefined") {
+  load("box"); // small, and needed on the first click
+  load("curry");
+  setTimeout(() => load("bag"), 2500); // the long one, once the page has settled
+}
+
+/* Plays a recording; false when it is not ready, so the caller can stand in. */
+function playClip({ file, volume, from = 0, max }) {
+  const buf = buffers[file];
+  if (!(buf instanceof AudioBuffer)) return false;
+  const c = audio();
+  if (!c) return false;
+  const src = c.createBufferSource();
+  src.buffer = buf;
+  const g = c.createGain();
+  const t = c.currentTime;
+  const len = Math.min(max || Infinity, buf.duration - from);
+  g.gain.setValueAtTime(volume, t);
+  if (max && len === max) {
+    g.gain.setValueAtTime(volume, t + len - 0.35);
+    g.gain.linearRampToValueAtTime(0.0001, t + len);
   }
-  a.volume = volume;
-  a.play().catch(() => {});
-  // long recordings are cut short with a quick fade
-  if (max)
-    a.stopTimer = setTimeout(() => {
-      a.fadeTimer = setInterval(() => {
-        if (a.volume > 0.08) a.volume = Math.max(0, a.volume - 0.08);
-        else {
-          clearInterval(a.fadeTimer);
-          a.pause();
-        }
-      }, 30);
-    }, max * 1000);
+  src.connect(g).connect(clipBus);
+  src.start(t, from, len);
+  playing.add(src);
+  src.onended = () => playing.delete(src);
+  return true;
 }
 
 export function play(name) {
-  if (RECORDED[name]) {
-    if (enabled && awake && allowed(name)) playClip(RECORDED[name]);
-    return;
-  }
-  if (!enabled || !awake || !fx[name] || !allowed(name)) return;
+  if (!enabled || !awake || !allowed(name)) return;
+  // a recording when it has loaded, otherwise its generated stand-in
+  if (RECORDED[name] && playClip(RECORDED[name])) return;
+  if (!fx[name]) return;
   const c = audio();
   if (c) fx[name](c, c.currentTime + 0.01);
 }
+
+const voices = new Set();
 
 /* Plays a recorded clip when one is set in VOICE, otherwise its chime. */
 export function say(phrase) {
@@ -258,6 +283,8 @@ export function say(phrase) {
   if (src) {
     const a = new Audio(process.env.PUBLIC_URL + src);
     a.volume = 0.8;
+    voices.add(a);
+    a.onended = () => voices.delete(a);
     a.play().catch(() => {});
     return;
   }
@@ -274,7 +301,7 @@ if (typeof window !== "undefined") {
     window.removeEventListener("pointerdown", wake, true);
     window.removeEventListener("keydown", wake, true);
     awake = true;
-    Object.keys(FILES).forEach(clip); // start loading the recordings
+    Object.keys(FILES).forEach(load); // in case they have not started loading
     if (!enabled) return;
     audio();
     say("xiaomei");
@@ -291,4 +318,18 @@ export function setSound(on) {
     /* not remembered, still works for this visit */
   }
   if (on) audio();
+  // silence everything at once, sounds already playing included
+  if (out) out.gain.setValueAtTime(on ? 1 : 0, ctx.currentTime);
+  if (!on) {
+    playing.forEach((src) => {
+      try {
+        src.stop();
+      } catch (e) {
+        /* already finished */
+      }
+    });
+    playing.clear();
+    voices.forEach((a) => a.pause());
+    voices.clear();
+  }
 }

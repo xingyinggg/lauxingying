@@ -30,6 +30,7 @@ import {
   sauces,
   sides,
   skills,
+  tasks,
 } from "./data/site";
 import { play, say, setSound, soundOn } from "./sound";
 import { ORBIT, OrbitNav } from "./orbit";
@@ -522,18 +523,113 @@ function Projects({ open, setOpen, onFeatured }) {
   );
 }
 
-function Skills() {
+/* Skills: the recruiter says what the job needs, and the skills answer. The
+   tasks are price cards on a sambal counter; picked ones shortlist the work
+   that shows them, and the skills they need darken, underlined in their colour. */
+const TILT = [-2, 1.5, -1, 2, -1.5];
+function Mark({ task }) {
+  return (
+    <i
+      className={`mk ${task.round ? "is-round" : ""}`}
+      style={{ "--c": DISCIPLINE[task.kind][1] }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function Skills({ onWork }) {
+  const [picked, setPicked] = useState([]);
+  const toggle = (name) =>
+    setPicked((was) =>
+      tasks
+        .map((t) => t.name)
+        .filter((n) => (n === name ? !was.includes(n) : was.includes(n))),
+    );
+  const chosen = tasks.filter((t) => picked.includes(t.name));
+  // each skill takes the mark of the first picked task that needs it
+  const from = {};
+  chosen.forEach((t) => t.skills.forEach((s) => (from[s] = from[s] || t)));
+  // the work that shows the picks, best match first
+  const hits = new Map();
+  chosen.forEach((t) =>
+    t.work.forEach((w) => hits.set(w, [...(hits.get(w) || []), t])),
+  );
+  const shortlist = [...hits].sort((a, b) => b[1].length - a[1].length);
+
   return (
     <>
-      <PanelTitle>Skills & Expertise</PanelTitle>
-      <dl className="cell">
+      <div className="counter">
+        <h2 className="sign counter-title">What does the job need?</h2>
+        <div className="task-row" role="group" aria-label="What the job needs">
+          {tasks.map((t) => (
+            <button
+              key={t.name}
+              type="button"
+              className="task"
+              aria-pressed={picked.includes(t.name)}
+              onClick={() => toggle(t.name)}
+            >
+              <Mark task={t} />
+              {t.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4" aria-live="polite">
+        {shortlist.length ? (
+          <ul className="tickets" aria-label="Work that shows it">
+            {shortlist.map(([w, by], i) => (
+              <li key={w}>
+                <button
+                  type="button"
+                  className="ticket"
+                  style={{
+                    "--r": `${TILT[i % TILT.length]}deg`,
+                    "--d": `${i * 70}ms`,
+                  }}
+                  onClick={() => onWork(w)}
+                  aria-label={`${w}, covers ${by.length} of ${chosen.length}`}
+                >
+                  {w}
+                  <span className="pips">
+                    {by.map((t) => (
+                      <Mark key={t.name} task={t} />
+                    ))}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-[14px] text-ink-soft">
+            Pick what the job needs, and the work that shows it comes out here.
+          </p>
+        )}
+      </div>
+
+      <h3 className="sign text-[24px] mt-6 mb-3">Skills & Expertise</h3>
+      <dl className={`cell ${chosen.length ? "is-filtered" : ""}`}>
         {sauces
           .flatMap((s) => s.groups)
           .map((g, i) => (
             <div key={g} className={i ? "rule-t pt-3 mt-3" : ""}>
               <dt className="label text-ink-soft">{g}</dt>
-              <dd className="mt-1.5 text-[16px] leading-[1.55]">
-                {skills[g].join(", ")}
+              <dd className="mt-1.5 text-[16px] leading-[1.75]">
+                {skills[g].map((s, k) => {
+                  const t = from[s];
+                  return (
+                    <span key={s}>
+                      <span
+                        className={`sk ${t ? "is-on" : ""} ${t?.round ? "is-round" : ""}`}
+                        style={t ? { "--c": DISCIPLINE[t.kind][1] } : undefined}
+                      >
+                        {s}
+                      </span>
+                      {k < skills[g].length - 1 && ", "}
+                    </span>
+                  );
+                })}
               </dd>
             </div>
           ))}
@@ -542,27 +638,132 @@ function Skills() {
   );
 }
 
-function Experience() {
+/* Experience: the jobs as a stack of name cards, like the one in the lid. The
+   top card follows a drag either way, with the next card rising under it, and
+   is thrown off that side when let go far enough; a click or → throws it right,
+   ← brings the last one back, and the index row brings any job to the top. */
+const DECK_TILT = [0, -1.6, 1.4, -1.2];
+const tiltAt = (x) => {
+  const a = Math.floor(x);
+  const f = x - a;
+  return DECK_TILT[a % 4] * (1 - f) + DECK_TILT[(a + 1) % 4] * f;
+};
+function Experience({ start = 0 }) {
+  const n = experience.length;
+  const [top, setTop] = useState(start % n);
+  const [flung, setFlung] = useState(0); // the side the top card is thrown to, while it flies
+  const [drag, setDrag] = useState(null); // { x, dx, moved } while held
+  const timer = useRef(0);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const deal = (dir, side = 1) => {
+    if (flung) return;
+    if (dir < 0) return setTop((t) => (t + n - 1) % n);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return setTop((t) => (t + 1) % n);
+    setFlung(side);
+    timer.current = setTimeout(() => {
+      setTop((t) => (t + 1) % n);
+      setFlung(0);
+    }, 240);
+  };
+
+  const grip = {
+    onPointerDown: (e) => {
+      if (flung) return;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setDrag({ x: e.clientX, dx: 0, moved: false });
+    },
+    onPointerMove: (e) =>
+      setDrag((d) => {
+        if (!d) return d;
+        const dx = e.clientX - d.x;
+        return { ...d, dx, moved: d.moved || Math.abs(dx) > 4 };
+      }),
+    onPointerUp: () => {
+      if (!drag) return;
+      setDrag(null);
+      if (!drag.moved) deal(1); // a click
+      else if (Math.abs(drag.dx) > 80) deal(1, Math.sign(drag.dx));
+    },
+    onPointerCancel: () => setDrag(null),
+  };
+
+  // how far the cards underneath have risen: with the drag, and fully once thrown
+  const rise = flung ? 1 : drag ? Math.min(Math.abs(drag.dx) / 140, 1) : 0;
+
   return (
     <>
       <PanelTitle>Experience</PanelTitle>
-      <ol className="cell">
+      <div
+        className={`deck ${drag ? "is-dragging" : ""}`}
+        tabIndex={0}
+        role="group"
+        aria-roledescription="stack of cards"
+        aria-label="Jobs. The left and right arrow keys go through them."
+        onKeyDown={(e) => {
+          if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+            e.preventDefault();
+            e.stopPropagation(); // here the arrows deal cards, not move the camera
+            deal(e.key === "ArrowRight" ? 1 : -1);
+          }
+        }}
+      >
+        {experience.map((e, i) => {
+          const pos = (i - top + n) % n;
+          const lead = pos === 0;
+          const dx = lead && drag ? drag.dx : 0;
+          const at = pos - rise;
+          const transform = lead
+            ? flung
+              ? `translate(${flung * 115}%, 20px) rotate(${flung * 10}deg)`
+              : `translateX(${dx}px) rotate(${dx / 30}deg)`
+            : `translateY(${at * 9}px) rotate(${tiltAt(at)}deg) scale(${1 - at * 0.035})`;
+          return (
+            <article
+              key={`${e.org}-${e.period}`}
+              className="ncard"
+              style={{ zIndex: n - pos, transform }}
+              aria-hidden={!lead}
+              {...(lead ? grip : {})}
+            >
+              <div className="ncard-band">
+                <span className="sign text-[20px] leading-[1.1]">{e.org}</span>
+                <span className="tick">{e.period}</span>
+              </div>
+              <div className="ncard-body">
+                <h3 className="sign font-extrabold text-[20px] leading-[1.15]">
+                  {e.role}
+                </h3>
+                <p className="mt-2 text-[15px] leading-[1.55] text-ink-soft">
+                  {e.text}
+                </p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+      <div className="deck-index" role="group" aria-label="Go to a job">
         {experience.map((e, i) => (
-          <li
+          <button
             key={`${e.org}-${e.period}`}
-            className={i ? "rule-t pt-5 mt-5" : ""}
+            type="button"
+            className="tick"
+            aria-current={i === top}
+            aria-label={`${e.role}, ${e.org}, ${e.period}`}
+            title={`${e.role}, ${e.org}`}
+            onClick={() => setTop(i)}
           >
-            <p className="tick uppercase text-ink-soft">{e.period}</p>
-            <h3 className="sign font-extrabold text-[24px] leading-[1.1] mt-1.5">
-              {e.role}
-            </h3>
-            <p className="label mt-2">{e.org}</p>
-            <p className="mt-2.5 text-[16px] leading-[1.6] text-ink-soft">
-              {e.text}
-            </p>
-          </li>
+            {e.period.replace(" — ", "–")}
+          </button>
         ))}
-      </ol>
+      </div>
+      <p className="deck-hint mt-3 text-[13px] text-ink-soft">
+        <span className="for-mouse">
+          Drag the top card either way, click it, or use ← →
+        </span>
+        <span className="for-touch">Swipe the top card either way, or tap it</span>
+      </p>
     </>
   );
 }
@@ -703,6 +904,31 @@ export default function Portfolio() {
     [fly],
   );
 
+  /* a ticket in the Skills shortlist: a project opens at its dish or in the
+     Projects list, a job comes to the top of the Experience stack */
+  const [jobTop, setJobTop] = useState(0);
+  useEffect(() => {
+    if (focus && focus !== "experience") setJobTop(0);
+  }, [focus]);
+  const openWork = useCallback(
+    (name) => {
+      const p = ALL.find((x) => x.title === name);
+      if (p?.featured) return pickDish(featured.indexOf(p));
+      setPicked(true);
+      play("tap");
+      if (p) {
+        setOpen(indexOf(p));
+        return fly("projects");
+      }
+      const j = experience.findIndex((e) => e.org === name);
+      if (j >= 0) {
+        setJobTop(j);
+        fly("experience");
+      }
+    },
+    [fly, pickDish],
+  );
+
   const [sauce, setSauce] = useState({ curry: false, sambal: false });
   const [opened, setOpened] = useState(false);
 
@@ -783,7 +1009,8 @@ export default function Portfolio() {
         back();
         return;
       }
-      if (e.altKey || e.ctrlKey || e.metaKey || no3d) return;
+      // a control that used the key itself (the Experience stack) keeps it
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || no3d) return;
       if (e.target.closest?.("input, textarea, select, [contenteditable]"))
         return;
       // only sideways: ↑ ↓ / W S are left alone for anything that scrolls
@@ -1209,8 +1436,8 @@ export default function Portfolio() {
                 onFeatured={(i) => pickDish(i)}
               />
             )}
-            {focus === "skills" && <Skills />}
-            {focus === "experience" && <Experience />}
+            {focus === "skills" && <Skills onWork={openWork} />}
+            {focus === "experience" && <Experience start={jobTop} />}
             {focus === "contact" && <Contact />}
             {focus === "connect" && <Connect />}
           </div>
